@@ -1,0 +1,63 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model Producto {
+  id       Int    @id @default(autoincrement())
+  nombre   String @unique
+  precio   Float
+  cantidad Int
+}
+
+
+model Encuesta {
+  id       Int      @id @default(autoincrement())
+  pregunta String
+  opciones Opcion[]
+}
+
+model Opcion {
+  id         Int      @id @default(autoincrement())
+  texto      String
+  votos      Int      @default(0)
+  encuestaId Int
+  encuesta   Encuesta @relation(fields: [encuestaId], references: [id], onDelete: Cascade)
+}
+
+
+model Inventario {
+  id          Int    @id @default(autoincrement())
+  producto    String @unique
+  stock       Int    @default(0)
+  stockMinimo Int    @default(5)
+}
+
+
+model Turno {
+  id       Int    @id @default(autoincrement())
+  cliente  String
+  servicio String
+  estado   String @default("esperando") 
+}
+
+
+model Habito {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @unique
+  meta      Int
+  registros RegistroHabito[]
+}
+
+model RegistroHabito {
+  id         Int      @id @default(autoincrement())
+  fecha      DateTime @default(now())
+  completado Boolean  @default(true)
+  habitoId   Int
+  habito     Habito   @relation(fields: [habitoId], references: [id], onDelete: Cascade)
+}
