@@ -8,7 +8,7 @@ import v1TareasRoutes from "./routes/v1/tareas.routes.js"
 import v2TareasRoutes from "./routes/v2/tareas.routes.js"
 
 const app = express()
-const PORT = process.env.PORT || 3000
+
 
 app.use(express.json())
 app.use(loggerMiddleware)
@@ -27,4 +27,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Error interno del servidor" })
 })
 
-app.listen(PORT, () => console.log(`Puerto ${PORT}`))
+export default app
