@@ -49,7 +49,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     return data as T;
   } catch (error: any) {
     if (error.message === 'Network request failed') {
-      throw new Error('Error de conexióo con el servidor. Verifica tu acceso a internet.');
+      throw new Error('Error de conexion con el servidor. Verifica tu acceso a internet.');
     }
     throw error;
   }
