@@ -17,7 +17,7 @@ async function request(path, options = {}) {
     const token = await AsyncStorage.getItem('token');
     if (!token) {
       router.replace('/login');
-      throw new Error('Sesión no iniciada');
+      throw new Error('Sesion no iniciada');
     }
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -44,6 +44,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+ 
   registro: (body) => request('/auth/registro', { method: 'POST', body }),
 
   login: (body) => request('/auth/login', { method: 'POST', body }),
@@ -55,4 +56,12 @@ export const api = {
   eliminarServicio: (id) => request(`/servicios/${id}`, { method: 'DELETE', auth: true }),
 
   editarServicio: (id, body) => request(`/servicios/${id}`, { method: 'PUT', body, auth: true }),
+
+  
+  get: async (path) => {
+    const data = await request(path, { method: 'GET', auth: true });
+    return { data }; 
+  },
+  post: (path, body) => request(path, { method: 'POST', body, auth: true }),
+  delete: (path) => request(path, { method: 'DELETE', auth: true }),
 };

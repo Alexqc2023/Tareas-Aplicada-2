@@ -11,8 +11,6 @@ export default function Servicios() {
 
   const [loading, setLoading] = useState(true);
 
-
-  
   const [nombre, setNombre] = useState('');
 
   const [descripcion, setDescripcion] = useState('');
@@ -22,7 +20,7 @@ export default function Servicios() {
   const [precio, setPrecio] = useState('');
 
   const [creando, setCreando] = useState(false);
-  
+
   const [idEditando, setIdEditando] = useState(null); 
 
   useFocusEffect(
@@ -59,10 +57,8 @@ export default function Servicios() {
     setCreando(true);
     try {
       if (idEditando) {
-        
         await api.editarServicio(idEditando, { nombre, descripcion, duracion: Number(duracion), precio: Number(precio) });
       } else {
-        
         await api.crearServicio({ nombre, descripcion, duracion: Number(duracion), precio: Number(precio) });
       }
       cancelarEdicion();
@@ -88,13 +84,9 @@ export default function Servicios() {
 
   const cancelarEdicion = () => {
     setIdEditando(null);
-
     setNombre('');
-
     setDescripcion('');
-
     setDuracion('');
-
     setPrecio('');
   };
 
@@ -132,12 +124,23 @@ export default function Servicios() {
   return (
     <View style={styles.container}>
 
-      <View style={styles.header}>
+      <View style={styles.headerContainer}>
 
         <Text style={styles.title}>Servicios Disponibles</Text>
+        
+        <View style={styles.buttonRow}>
 
-        <Button title="Cerrar Sesion" color="red" onPress={logout} />
+          <TouchableOpacity style={styles.btnReservas} onPress={() => router.push('/reservas')}>
 
+            <Text style={styles.btnText}>MIS RESERVAS</Text>
+
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.btnSalir} onPress={logout}>
+
+            <Text style={styles.btnText}>Salir</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {rol === 'admin' && (
@@ -155,7 +158,7 @@ export default function Servicios() {
           {creando ? (
             <ActivityIndicator />
           ) : (
-            <View style={styles.buttonRow}>
+            <View style={styles.formButtons}>
               <View style={{ flex: 1, marginRight: idEditando ? 10 : 0 }}>
                 <Button 
                   title={idEditando ? "Guardar Cambios" : "Agregar Servicio"} 
@@ -195,6 +198,23 @@ export default function Servicios() {
             </View>
             <Text>{item.descripcion}</Text>
             <Text style={styles.details}>Duracion: {item.duracion} min | Precio: ${item.precio}</Text>
+            
+            <TouchableOpacity 
+              style={styles.bookButton}
+              onPress={() => router.push({ 
+                pathname: '/servicios/[id]', 
+                params: { 
+                  id: item.id, 
+                  nombre: item.nombre, 
+                  descripcion: item.descripcion, 
+                  duracion: item.duracion, 
+                  precio: item.precio 
+                } 
+              })}
+            >
+              <Text style={styles.bookButtonText}>Ver Detalles / Reservar</Text>
+            </TouchableOpacity>
+
           </View>
         )}
         ListEmptyComponent={<Text style={{textAlign: 'center', marginTop: 20}}>No hay servicios registrados.</Text>}
@@ -205,32 +225,55 @@ export default function Servicios() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#f5f5f5' },
-
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  
+  headerContainer: {
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 15,
+    color: '#000',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  btnReservas: {
+    flex: 1, 
+    backgroundColor: '#17a2b8',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  btnSalir: {
+    flex: 1, 
+    backgroundColor: '#dc3545',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  btnText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, marginTop: 20 },
-
-  title: { fontSize: 20, fontWeight: 'bold' },
-
-  card: { backgroundColor: '#fff', padding: 15, borderRadius: 8, marginBottom: 10, elevation: 2 },
-
+  card: { backgroundColor: '#fff', padding: 15, borderRadius: 8, marginBottom: 15, elevation: 2 },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 },
-
   cardTitle: { fontSize: 18, fontWeight: 'bold', flex: 1 },
-
   actionButtons: { flexDirection: 'row' },
-
   editText: { color: 'blue', fontWeight: 'bold', marginRight: 15 },
-
   deleteText: { color: 'red', fontWeight: 'bold' },
-
-  details: { color: 'green', marginTop: 5, fontWeight: 'bold' },
-
+  details: { color: 'green', marginTop: 5, fontWeight: 'bold', marginBottom: 10 },
   adminBox: { backgroundColor: '#e8f4f8', padding: 15, borderRadius: 8, marginBottom: 20 },
-
   adminTitle: { fontWeight: 'bold', marginBottom: 10 },
-
   input: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#ccc', padding: 8, marginBottom: 10, borderRadius: 5 },
-
-  buttonRow: { flexDirection: 'row', justifyContent: 'space-between' }
+  formButtons: { flexDirection: 'row', justifyContent: 'space-between' },
+  bookButton: { backgroundColor: '#28a745', padding: 10, borderRadius: 5, alignItems: 'center' },
+  bookButtonText: { color: 'white', fontWeight: 'bold', fontSize: 15 }
 });
