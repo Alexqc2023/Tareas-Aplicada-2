@@ -3,6 +3,7 @@ import { View, Text, FlatList, ActivityIndicator, Button, StyleSheet, TextInput,
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router, useFocusEffect } from 'expo-router';
 import { api } from '../services/api';
+import { solicitarPermisosNotificaciones } from '../services/notificaciones';
 
 export default function Servicios() {
   const [servicios, setServicios] = useState([]);
@@ -35,6 +36,7 @@ export default function Servicios() {
       router.replace('/login');
       return;
     }
+    await solicitarPermisosNotificaciones(); 
     const userRol = await AsyncStorage.getItem('rol');
     setRol(userRol);
     cargarServicios();
@@ -134,6 +136,10 @@ export default function Servicios() {
 
             <Text style={styles.btnText}>MIS RESERVAS</Text>
 
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.btnReservas, { backgroundColor: '#6f42c1' }]} onPress={() => router.push('/perfil')}>
+            <Text style={styles.btnText}>MI PERFIL</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.btnSalir} onPress={logout}>

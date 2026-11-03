@@ -5,7 +5,7 @@ export default {
     version: "1.0.0",
     scheme: "sistemareservas",
     extra: {
-      apiUrl: process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.18:3000"
+      apiUrl: process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.19:3000"
     }
   }
 };

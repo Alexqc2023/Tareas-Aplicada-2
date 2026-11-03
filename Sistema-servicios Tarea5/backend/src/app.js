@@ -1,7 +1,5 @@
 import "dotenv/config";
-
 import express from "express";
-
 import cors from "cors";
 
 import { registro, login } from "./controllers/auth.controller.js";
@@ -10,15 +8,27 @@ import { obtenerServicios, crearServicio, editarServicio, eliminarServicio } fro
 
 import { crearReserva, misReservas, todasLasReservas, cambiarEstado, cancelarReserva } from "./controllers/reservas.controller.js";
 
+import { obtenerPerfil, actualizarPerfil } from "./controllers/usuarios.controller.js"; 
+
 import { verificarToken, soloAdmin } from "./middlewares/auth.middleware.js";
 
+
 const app = express();
+
 app.use(cors());
+
 app.use(express.json());
+
 
 app.post("/auth/registro", registro);
 
 app.post("/auth/login", login);
+
+
+app.get("/usuarios/perfil", verificarToken, obtenerPerfil);
+
+app.put("/usuarios/perfil", verificarToken, actualizarPerfil);
+
 
 app.get("/servicios", verificarToken, obtenerServicios);
 
